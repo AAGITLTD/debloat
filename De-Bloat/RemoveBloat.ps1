@@ -1616,6 +1616,7 @@ if ($manufacturer -like "*Dell*") {
         "Dell SupportAssist Remediation"
         "Dell Update - SupportAssist Update Plugin"
         "DellInc.PartnerPromo"
+	"Dell Trusted Device Agent"
     )
 
 
