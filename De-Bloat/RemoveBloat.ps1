@@ -1630,7 +1630,7 @@ if ($manufacturer -like "*Dell*") {
             write-output "Removed provisioned package for $app."
         }
         else {
-            write-output "Provisioned package for $app not found."
+            write-output "AppxProvisionedPackage for $app not found."
         }
 
         if (Get-AppxPackage -allusers -Name $app -ErrorAction SilentlyContinue) {
@@ -1638,7 +1638,14 @@ if ($manufacturer -like "*Dell*") {
             write-output "Removed $app."
         }
         else {
-            write-output "$app not found."
+            write-output "AppxPackage for $app not found."
+        }
+        if (Get-Package -Name $app -ErrorAction SilentlyContinue) {
+            Get-Package -Name $app | Uninstall-Package -AllVersions -Force -ErrorAction SilentlyContinue
+            write-output "Removed $app."
+        }
+        else {
+            write-output "Package for $app not found."
         }
 
         UninstallAppFull -appName $app
@@ -1821,7 +1828,7 @@ if ($manufacturer -like "Lenovo") {
             write-output "Removed provisioned package for $app."
         }
         else {
-            write-output "Provisioned package for $app not found."
+            write-output "AppxProvisionedPackage for $app not found."
         }
 
         if (Get-AppxPackage -allusers -Name $app -ErrorAction SilentlyContinue) {
@@ -1829,7 +1836,14 @@ if ($manufacturer -like "Lenovo") {
             write-output "Removed $app."
         }
         else {
-            write-output "$app not found."
+            write-output "AppxPackage for $app not found."
+        }
+        if (Get-Package -Name $app -ErrorAction SilentlyContinue) {
+            Get-Package -Name $app | Uninstall-Package -AllVersions -Force -ErrorAction SilentlyContinue
+            write-output "Removed $app."
+        }
+        else {
+            write-output "Package for $app not found."
         }
 
         UninstallAppFull -appName $app
