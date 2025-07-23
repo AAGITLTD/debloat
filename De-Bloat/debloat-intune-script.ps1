@@ -20,7 +20,7 @@ $scriptUrl = "https://github.com/AAGITLTD/debloat/raw/refs/heads/main/De-Bloat/R
 #Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath
 #Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
 
-Invoke-WebRequest -Uri $scriptUrl -OutFile $templateFilePath
+Invoke-WebRequest -Uri $scriptUrl -OutFile $templateFilePath\RemoveBloat.ps1
 
 ##Populate between the speechmarks any apps you want to whitelist, comma-separated
 $arguments = ' -customwhitelist "" -RemoveRetailOffice'
