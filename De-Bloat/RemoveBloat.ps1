@@ -1180,7 +1180,7 @@ if ($version -like "*Windows 11*") {
 
     if ($nonAdminLoggedOn -eq $false) {
         MkDir -Path "C:\Users\Default\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState" -Force -ErrorAction SilentlyContinue | Out-Null
-        $starturl = "https://github.com/AAGITLTD/debloat/raw/main/De-Bloat/start2.bin"
+        $starturl = "https://github.com/AAGITLTD/debloat/raw/refs/heads/main/De-Bloat/start2.bin"
         invoke-webrequest -uri $starturl -outfile "C:\Users\Default\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\Start2.bin"
     }
 }
@@ -2034,7 +2034,7 @@ if ($mcafeeinstalled -eq "true") {
     ### Download McAfee Consumer Product Removal Tool ###
     write-output "Downloading McAfee Removal Tool"
     # Download Source
-    $URL = 'https://github.com/AAGITLTD/debloat/raw/main/De-Bloat/mcafeeclean.zip'
+    $URL = 'https://github.com/AAGITLTD/debloat/raw/refs/heads/main/De-Bloat/mcafeeclean.zip'
 
     # Set Save Directory
     $destination = 'C:\ProgramData\Debloat\mcafee.zip'
@@ -2053,7 +2053,7 @@ if ($mcafeeinstalled -eq "true") {
     ### Download McAfee Consumer Product Removal Tool ###
     write-output "Downloading McAfee Removal Tool"
     # Download Source
-    $URL = 'https://github.com/AAGITLTD/debloat/raw/main/De-Bloat/mccleanup.zip'
+    $URL = 'https://github.com/AAGITLTD/debloat/raw/refs/heads/main/De-Bloat/mccleanup.zip'
 
     # Set Save Directory
     $destination = 'C:\ProgramData\Debloat\mcafeenew.zip'
