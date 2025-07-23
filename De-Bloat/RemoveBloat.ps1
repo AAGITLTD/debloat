@@ -158,7 +158,10 @@ N/A
 #                                                                                                          #
 ############################################################################################################
 param (
-    [string[]]$customwhitelist
+    [Parameter(Mandatory=$false)]
+    [string[]]$customwhitelist,
+    [Parameter(Mandatory=$false)]
+	[switch]$RemoveRetailOffice
 )
 
 ##Elevate if needed
@@ -1500,7 +1503,7 @@ if ($manufacturer -like "*HP*") {
             write-output "Removed provisioned package for $app."
         }
         else {
-            write-output "Provisioned package for $app not found."
+            write-output "AppxProvisionedPackage for $app not found."
         }
 
         if (Get-AppxPackage -allusers -Name $app -ErrorAction SilentlyContinue) {
@@ -1508,7 +1511,14 @@ if ($manufacturer -like "*HP*") {
             write-output "Removed $app."
         }
         else {
-            write-output "$app not found."
+            write-output "AppxPackage for $app not found."
+        }
+        if (Get-Package -Name $app -ErrorAction SilentlyContinue) {
+            Get-Package -Name $app | Uninstall-Package -AllVersions -Force -ErrorAction SilentlyContinue
+            write-output "Removed $app."
+        }
+        else {
+            write-output "Package for $app not found."
         }
 
         UninstallAppFull -appName $app
@@ -2161,7 +2171,7 @@ $IsOOBEComplete = $false
 $hr = [Api.Kernel32]::OOBEComplete([ref] $IsOOBEComplete)
  
 
-if ($IsOOBEComplete -eq 0) {
+if (($IsOOBEComplete -eq 0) -or ($ForceRemoveWin32Apps -eq $true)) {
 
     write-output "Still in OOBE, continue"
     ##Apps to remove - NOTE: Chrome has an unusual uninstall so sort on it's own
@@ -2255,6 +2265,51 @@ Start-Process -FilePath "C:\ProgramData\Debloat\setup.exe" -ArgumentList "/confi
 else {
     write-output "Intune detected, skipping removal of apps"
     write-output "$intunecomplete number of apps detected"
+
+}
+
+if($RemoveRetailOffice){
+## The XML below will Remove Retail Copies of Office 365 and OneNote, including all languages. Note: Office Apps for Entreprise Editions will remain.
+
+## Remove Retail Copies XML Start ##
+$xml = @"
+<Configuration>
+  <Display Level="None" AcceptEULA="True" />
+  <Property Name="FORCEAPPSHUTDOWN" Value="True" />
+  <Remove>
+    <Product ID="O365HomePremRetail"/>
+    <Product ID="OneNoteFreeRetail"/>
+  </Remove>
+</Configuration>
+"@
+## Remove Retail Copies XML End ##
+
+
+## The XML below will Remove All Microsoft C2Rs ( Click-to-Runs), regardless of Product ID and Languages. To remove All Comment out or remove the XML block between Start and End above. Then Uncomment the XML below.
+
+## Remove All Office Products XML Start ##
+
+#$xml = @"
+#<Configuration>
+#  <Display Level="None" AcceptEULA="True" />
+#  <Property Name="FORCEAPPSHUTDOWN" Value="True" />
+#  <Remove All="TRUE">
+#  </Remove>
+#</Configuration>
+#"@
+
+## Remove All Office Products XML End
+
+##write XML to the debloat folder
+$xml | Out-File -FilePath "C:\ProgramData\Debloat\o365.xml"
+
+##Download the Latest ODT URI obtained from Stealthpuppy's Evergreen PS Module
+$odturl = "https://officecdn.microsoft.com/pr/wsus/setup.exe"
+$odtdestination = "C:\ProgramData\Debloat\setup.exe"
+Invoke-WebRequest -Uri $odturl -OutFile $odtdestination -Method Get -UseBasicParsing
+
+##Run it
+Start-Process -FilePath "C:\ProgramData\Debloat\setup.exe" -ArgumentList "/configure C:\ProgramData\Debloat\o365.xml" -WindowStyle Hidden -Wait
 
 }
 
