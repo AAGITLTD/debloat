@@ -15,9 +15,12 @@ $zipUrl = "https://github.com/AAGITLTD/debloat/raw/refs/heads/main/De-Bloat/Remo
 $zipPath = "$templateFilePath\RemoveBloat.zip"
 $extractPath = "$templateFilePath"
 
-Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath
-Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+$scriptUrl = "https://github.com/AAGITLTD/debloat/raw/refs/heads/main/De-Bloat/RemoveBloat.ps1"
 
+#Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath
+#Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+
+Invoke-WebRequest -Uri $scriptUrl -OutFile $templateFilePath
 
 ##Populate between the speechmarks any apps you want to whitelist, comma-separated
 $arguments = ' -customwhitelist ""'
